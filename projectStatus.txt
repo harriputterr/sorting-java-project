@@ -1,0 +1,21 @@
+*****************************************
+* CPRG304A, Team Sidon
+* 
+* Assignment 1: Complexity & Sorting
+*
+* Team Members: Zoë Goodwin
+*				Mousamiben Desai
+*				Sourabh Thakur
+*				Nishant Kumar
+*****************************************
+
+Completeness of Project: ___%
+
+Known Deficiencies:
+	- 
+	- 
+	
+Missing Functionalities:
+	- 
+	- 
+
