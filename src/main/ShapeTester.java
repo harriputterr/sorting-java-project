@@ -1,4 +1,4 @@
-
+package main;
 import java.io.BufferedReader;
 import main.shapes.AbstractShape;
 import java.io.FileReader;
