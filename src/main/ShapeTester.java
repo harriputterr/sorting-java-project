@@ -1,14 +1,15 @@
+package main;
 import java.io.BufferedReader;
-import shapes.AbstractShape;
+import main.shapes.AbstractShape;
 import java.io.FileReader;
 import java.io.IOException;
-import shapes.PrismOctagonal;
-import shapes.PrismPentagonal;
-import shapes.PrismSquare;
-import shapes.PrismTriangular;
-import shapes.Pyramid;
-import shapes.Cone;
-import shapes.Cylinder;
+import main.shapes.PrismOctagonal;
+import main.shapes.PrismPentagonal;
+import main.shapes.PrismSquare;
+import main.shapes.PrismTriangular;
+import main.shapes.Pyramid;
+import main.shapes.Cone;
+import main.shapes.Cylinder;
 
 
 public class ShapeTester {
