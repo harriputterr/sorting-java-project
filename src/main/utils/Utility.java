@@ -1,5 +1,8 @@
 package main.utils;
 
+
+
+
 import main.shapes.AbstractShape;
 import java.util.Comparator;
 
@@ -133,5 +136,24 @@ public class Utility {
 
         return i + 1;
     }
+ // Shell Sort
+    public static void shellSort(AbstractShape[] arr, Comparator<AbstractShape> comparator) {
+        int n = arr.length;
+       
+        for (int gap = n / 2; gap > 0; gap /= 2) {
+ 
+            for (int i = gap; i < n; i += 1) {
+                AbstractShape temp = arr[i];
+
+                int j;
+                for (j = i; j >= gap && comparator.compare(arr[j - gap], temp) > 0; j -= gap)
+                    arr[j] = arr[j - gap];
+                
+                
+                arr[j] = temp;
+            }
+        }
+    }
+
 }
 
