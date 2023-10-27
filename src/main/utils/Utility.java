@@ -1,14 +1,19 @@
 package main.utils;
-
-
-
+/**
+* Created on October 17, 2023
+* @author Nishant Kumar, Sourabh Thakur
+* @version 1.3
+*/
 
 import main.shapes.AbstractShape;
 import java.util.Comparator;
 
 public class Utility {
-
-    // Bubble Sort
+     /**
+     * Sorts an array of AbstractShape objects using the Bubble Sort algorithm.
+     * @param arr The array to be sorted.
+     * @param comparator The comparator to determine the order of sorting.
+     */
     public static void bubbleSort(AbstractShape[] arr, Comparator<AbstractShape> comparator) {
         int n = arr.length;
         boolean swapped;
@@ -30,7 +35,11 @@ public class Utility {
         }
     }
 
-    // Selection Sort
+     /**
+     * Sorts an array of AbstractShape objects using the Selection Sort algorithm.
+     * @param arr The array to be sorted.
+     * @param comparator The comparator to determine the order of sorting.
+     */
     public static void selectionSort(AbstractShape[] arr, Comparator<AbstractShape> comparator) {
         int n = arr.length;
 
@@ -49,7 +58,11 @@ public class Utility {
         }
     }
 
-    // Insertion Sort
+    /**
+     * Sorts an array of AbstractShape objects using the Insertion Sort algorithm.
+     * @param arr The array to be sorted.
+     * @param comparator The comparator to determine the order of sorting.
+     */
     public static void insertionSort(AbstractShape[] arr, Comparator<AbstractShape> comparator) {
         int n = arr.length;
         for (int i = 1; i < n; i++) {
@@ -65,7 +78,11 @@ public class Utility {
         }
     }
 
-    // Merge Sort
+    /**
+     * Sorts an array of AbstractShape objects using the Merge Sort algorithm.
+     * @param arr The array to be sorted.
+     * @param comparator The comparator to determine the order of sorting.
+     */
     public static void mergeSort(AbstractShape[] arr, Comparator<AbstractShape> comparator) {
         int n = arr.length;
         if (n < 2) return;
@@ -83,7 +100,13 @@ public class Utility {
 
         merge(arr, left, right, comparator);
     }
-
+    /**
+     * Helper method for the Merge Sort algorithm. Merges two arrays into one.
+     * @param arr The array to merge into.
+     * @param left The left subarray.
+     * @param right The right subarray.
+     * @param comparator The comparator to determine the order of merging.
+     */
     private static void merge(AbstractShape[] arr, AbstractShape[] left, AbstractShape[] right, Comparator<AbstractShape> comparator) {
         int i = 0, j = 0, k = 0;
 
@@ -104,10 +127,21 @@ public class Utility {
         }
     }
 
-    // Quick Sort
+    /**
+     * Sorts an array of AbstractShape objects using the Quick Sort algorithm.
+     * @param arr The array to be sorted.
+     * @param comparator The comparator to determine the order of sorting.
+     */
     public static void quickSort(AbstractShape[] arr, Comparator<AbstractShape> comparator) {
         quickSortHelper(arr, 0, arr.length - 1, comparator);
     }
+    /**
+     * Helper method for the Quick Sort algorithm. Recursively sorts subarrays.
+     * @param arr The array to be sorted.
+     * @param low The index of the lower bound of the subarray.
+     * @param high The index of the upper bound of the subarray.
+     * @param comparator The comparator to determine the order of sorting.
+     */
 
     private static void quickSortHelper(AbstractShape[] arr, int low, int high, Comparator<AbstractShape> comparator) {
         if (low < high) {
@@ -116,7 +150,14 @@ public class Utility {
             quickSortHelper(arr, pivotIndex + 1, high, comparator);
         }
     }
-
+/**
+     * Helper method for the Quick Sort algorithm. Partitions the array into two parts.
+     * @param arr The array to be partitioned.
+     * @param low The index of the lower bound of the subarray.
+     * @param high The index of the upper bound of the subarray.
+     * @param comparator The comparator to determine the order of partitioning.
+     * @return The index of the pivot element.
+     */
     private static int partition(AbstractShape[] arr, int low, int high, Comparator<AbstractShape> comparator) {
         AbstractShape pivot = arr[high];
         int i = (low - 1);
@@ -136,7 +177,11 @@ public class Utility {
 
         return i + 1;
     }
- // Shell Sort
+ /**
+     * Sorts an array of AbstractShape objects using the Shell Sort algorithm.
+     * @param arr The array to be sorted.
+     * @param comparator The comparator to determine the order of sorting.
+     */
     public static void shellSort(AbstractShape[] arr, Comparator<AbstractShape> comparator) {
         int n = arr.length;
        
@@ -156,4 +201,3 @@ public class Utility {
     }
 
 }
-

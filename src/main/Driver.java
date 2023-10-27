@@ -2,175 +2,153 @@ package main;
 
 /**
 * Created on October 17, 2023
-* @author Zoë Goodwin, Mousamiben Desai
-* @version 1.3
+* @author Zoë Goodwin
+* @version 1.4
 */
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Scanner;
+import java.lang.reflect.Constructor;
 
 import main.shapes.AbstractShape;
-import main.shapes.Cone;
-import main.shapes.Cylinder;
-import main.shapes.PrismOctagonal;
-import main.shapes.PrismPentagonal;
-import main.shapes.PrismSquare;
-import main.shapes.PrismTriangular;
-import main.shapes.Pyramid;
 import main.utils.Utility;
 
 public class Driver
 {
 	// program entry point
 	public static void main(String[] args) {
-	    if (args.length < 6) {
-		inputGuide();
-            return;
-	    }
 	    
 	    // Parse command-line arguments
-	    String fileName = parseCase(args, "-f");
-	    String typeComparison = parseCase(args, "-t");
-	    String sortingAlgorithm = parseCase(args, "-s");
+	    String fileName = parseCase(args, "f");
+	    String typeComparison = parseCase(args, "c");
+	    String sortingAlgorithm = parseCase(args, "s");
+	    
+	    // if command-line input is incomplete, print inputGuide
+	    if (fileName == null || typeComparison == null || sortingAlgorithm == null) {
+		inputGuide();
+	    }
 		
-		// if command-line input is incomplete, print inputGuide
-		if (fileName == null || typeComparison == null || sortingAlgorithm == null) {
-			inputGuide();
-			return;
-		}
+	    // load shapes file into array AbstractShape
+	    AbstractShape[] shapes = loadShapesFile(fileName);
+
+	    // error message for empty or null file
+	    if (shapes == null) {
+		System.out.println("Unable to load shapes.");
+		return;
+	    }
+
+	    // variable for storing benchmarking start time
+	    long startTime = System.currentTimeMillis();
+
+	    // execute sorting arguments
+	    sortShapes(shapes, typeComparison, sortingAlgorithm);
+
+	    // variable for storing benchmarking end time
+	    long endTime = System.currentTimeMillis();
+
+	    // calculate algorithm duration
+	    long algorithmDuration = endTime - startTime;
 		
-		// load shapes file into array AbstractShape
-		AbstractShape[] shapes = loadShapesFile(fileName);
-		
-		// error message for empty or null file
-		if (shapes == null) {
-			System.out.println("Unable to load shapes.");
-			return;
-		}
-		
-		// variable for storing benchmarking start time
-		long startTime = System.currentTimeMillis();
-		
-		// execute sorting arguments
-		sortShapes(shapes, typeComparison, sortingAlgorithm);
-		
-		// variable for storing benchmarking end time
-		long endTime = System.currentTimeMillis();
-		
-		// calculate algorithm duration
-		long algorithmDuration = endTime - startTime;
-				
-		// display the sorting results
-		printResults(shapes, algorithmDuration);
-				
+	    // display the sorting results
+	    printResults(shapes, algorithmDuration);
 		
 	}
 
 	
+	// ***PRIVATE METHODS***
+	
+	
 	// method to ensure case and order insensitivity for interpreting command-line arguments
-	private static String parseCase(String[] args, String choice) {
+	private static String parseCase(String[] args, String flag) {
 	    for (int i = 0; i < args.length; i++) {
-	        if (args[i].equalsIgnoreCase(choice)) {
-	            if (i < args.length - 1) {
-	                return args[i + 1];
+	        System.out.println(args[i]); //		<-DELETE LATER
+	        char[] charArray = args[i].toCharArray();
+		if (charArray[0] == ('-')) {
+	            if (charArray[1] == 'f' || charArray[1] == 'F' ||
+	        	charArray[1] == 'c' || charArray[1] == 'C' ||
+	        	charArray[1] == 's' || charArray[1] == 'S') {
+	                return args[i].substring(2);
 	            }
 	        }
 	    }
 	    return null;
 	}
-
 	
 	
-	// method to handle loading the shapes text file into an array
-	private static AbstractShape[] loadShapesFile(String fileName)
-	{
-		List<AbstractShape> shapeList = new ArrayList<>();
+	// method to handle loading the shapes text file into an array list
+	private static AbstractShape[] loadShapesFile(String fileName) {
 		
-		try (BufferedReader reader = new BufferedReader(new FileReader(fileName))){
-			// Take out the first numbers which is the number of shapes
-			String firstLine = reader.readLine();
-	        if (firstLine == null) {
-	            System.out.println("File is empty.");
-	            return null;
-	        }
-	        
-	        int numShapes = 0;
-	        try {
-	            numShapes = Integer.parseInt(firstLine.trim());
-	        } catch (NumberFormatException e) {
-	            System.out.println("Expected an integer (number of shapes) on the first line, but got: '" + firstLine + "'.");
-	            return null;
-	        }
-
-	        // Check if the number of shapes is a reasonable value
-	        if (numShapes <= 0) {
-	            System.out.println("Invalid number of shapes: " + numShapes);
-	            return null;
-	            }
-
-			AbstractShape[] shape = new AbstractShape[numShapes];
-			
-			
-			// Run a loop up to the number of shapes present
-			for(int i = 0; i < numShapes; i++) {
-				// Read all the text and put it into a line
-				String line = reader.readLine();
-				// split the line into separate parts
-				String[] parts = line.split(" ");
-				// Take first index as ShapeType
-				String shapeType = parts[0];
-				// Second Index as height
-				double height = Double.parseDouble(parts[1]);
-				// Third index as baseRadius
-				double baseRadius = Double.parseDouble(parts[2]);
-				
-				// this will put the values of height and baseRadius in shapes If "Cylinder" match with shapeType
-				if("Cylinder".equalsIgnoreCase(shapeType)) {
-					shape[i] = new Cylinder(height,baseRadius);
-					
-					
-				}
-				// this will put the values of height and baseRadius in shapes If "Cone" match with shapeType
-				else if ("Cone".equalsIgnoreCase(shapeType)) {
-					shape[i] = new Cone(height,baseRadius);
-				}
-				// this will put the values of height and baseRadius in shapes If "Pyramid" match with shapeType
-				else if ("Pyramid".equalsIgnoreCase(shapeType)) {
-					shape[i] = new Pyramid(height,baseRadius);
-				}
-				// this will put the values of height and baseRadius in shapes If "PrismOctagonal" match with shapeType
-				else if ("PrismOctagonal".equalsIgnoreCase(shapeType)){
-					shape[i] = new PrismOctagonal(height,baseRadius);
-				}
-				// this will put the values of height and baseRadius in shapes If "PrismPentagonal" match with shapeType
-				else if ("PrismPentagonal".equalsIgnoreCase(shapeType)) {
-					shape[i] = new PrismPentagonal(height,baseRadius);
-				}
-				// this will put the values of height and baseRadius in shapes If "PrismSquare" match with shapeType
-				else if ("PrismSquare".equalsIgnoreCase(shapeType)) {
-					shape[i] = new PrismSquare(height,baseRadius);
-				}
-				// this will put the values of height and baseRadius in shapes If "PrismTriangular" match with shapeType
-				else if ("PrismTriangular".equalsIgnoreCase(shapeType)) {
-					shape[i] = new PrismTriangular(height,baseRadius);
-				}
-				if (shape != null) {
-					shapeList.add(shape[i]);}
-			}
-			
-		} catch (IOException e) {
-                e.printStackTrace();
-            }
-			
-	    // return array
-	    return shapeList.toArray(new AbstractShape[0]);
-			
+	    List<AbstractShape> shapeList = new ArrayList<>();
+	    
+	    // used FileInputStream to minimise memory load for huge files
+	    try (FileInputStream fis = new FileInputStream(fileName);
+		InputStreamReader isr = new InputStreamReader(fis);
+		BufferedReader reader = new BufferedReader(isr)) {
+		
+		StringBuilder sb = new StringBuilder();
+		String line;
+		while ((line = reader.readLine()) != null) {
+		    sb.append(line).append(" ");
+		}
+		
+		String[] shapeData = sb.toString().split(" ");
+		System.out.println("shape data:" + shapeData); //		<--DELETE LATER!
+		
+		// if not enough data for even one shape
+		if (shapeData.length < 2) {
+		    System.out.println("Not enough data in file.");
+		    return null;
+		}
+		
+		// if 'number of shapes' integer at beginning of file is missing
+		int numShapes;
+		try {
+		    numShapes = Integer.parseInt(shapeData[0]);
+		} catch (NumberFormatException e) {
+		    System.out.println("Integer expected for number of shapes, but read" + shapeData[0] + ".");
+		    return null;
+		}
+		
+		// if number of shapes does not match number of expected shape attributes in file
+		if (shapeData.length < 1 + numShapes * 3) {
+		    System.out.println("There is not enough data for the number of shapes declared.");
+		    return null;
+		}
+		
+		// the reflection section!
+		// manages iteration through the shapeData String
+		// since shapeData[0] is the number of shapes, the index starts at shapeData[1]
+		int dataIndex = 1;
+		for (int i = 0; i < numShapes; i++) {
+		    String shapeType = shapeData[dataIndex++];
+		    double height = Double.parseDouble(shapeData[dataIndex++]);
+		    double baseMeasure = Double.parseDouble(shapeData[dataIndex++]);
+		    
+		    // reflection to instantiate shape objects
+		    // catches for various fun shape exceptions
+		    try {
+			Class<?> classy = Class.forName("main.shapes." + shapeType);
+			Constructor<?> constructor = classy.getConstructor(double.class, double.class);
+			AbstractShape shape = (AbstractShape) constructor.newInstance(height, baseMeasure);
+			shapeList.add(shape);
+		    } catch (ClassNotFoundException e) {
+			System.out.println("Shape type not found:" + shapeType);
+		    } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | java.lang.reflect.InvocationTargetException e) {
+			System.out.println("Error creating shape " + shapeType + ".");
+		    }
+		}		
+	    } catch (IOException e) {
+		e.printStackTrace();
+		return null;
+	    }
+	    
+	    return shapeList.toArray(new AbstractShape[0]);			
 	}	
 
 	
@@ -217,7 +195,7 @@ public class Driver
     	    		case "q":
     	    		    Utility.quickSort(shapes, comparator);
     	    		    break;
-    	    		case "x":
+    	    		case "z":
     	    		    Utility.shellSort(shapes, comparator);
     	    		    break;
     	    		default:
@@ -232,7 +210,7 @@ public class Driver
 	    System.out.println("Inputs: java -jar sort.jar -f <file_name> -t <v/h/a> -s <b/s/i/m/q/z>");
 	    System.out.println("-f: File path for the shapes text file.");
 	    System.out.println("-t: Type comparison (v: volume, h: height, a: base area");
-	    System.out.println("-s: Sorting algorithm (b: bubble, s: selection, i: insertion, m: merge, q: quick, x: shell");
+	    System.out.println("-s: Sorting algorithm (b: bubble, s: selection, i: insertion, m: merge, q: quick, z: shell");
 	}
 	
 	// method to display the benchmarking and sorted results
@@ -248,9 +226,4 @@ public class Driver
 		System.out.println("Value for position " + i + ": " + shapes[i]);
 	    }
 	}
-	
-	
-	
-	
-		
 }

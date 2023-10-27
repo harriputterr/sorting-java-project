@@ -37,4 +37,11 @@ public class Cone extends AbstractShape
 	{
 		return (1.0 / 3.0) * Math.PI * radius * radius * height;
 	}
+	
+	// toString() override for Cone, for printing shapeData values
+	@Override
+	public String toString()
+	{
+	    return "Cone, height: " + height + ", radius: " + radius;
+	}
 }

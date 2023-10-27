@@ -39,4 +39,11 @@ public class Cylinder extends AbstractShape
 	{
 		return Math.PI * radius * radius * height;
 	}
+	
+	// toString() override for Cylinder, for printing shapeData values
+	@Override
+	public String toString()
+	{
+	    return "Cylinder, height: " + height + ", radius: " + radius;
+	}
 }

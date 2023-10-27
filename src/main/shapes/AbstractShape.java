@@ -10,7 +10,7 @@ import java.util.Comparator;
 
 public abstract class AbstractShape implements Comparable<AbstractShape>
 {
-	
+
 	// getters
 	public abstract double getHeight();
 	public abstract double getBaseArea();
@@ -42,5 +42,8 @@ public abstract class AbstractShape implements Comparable<AbstractShape>
 			return Double.compare(s1.getBaseArea(), s2.getBaseArea());
 		}
 	}
+	
+	// way to override toString() when printing shape data
+	public abstract String toString();
 
 }

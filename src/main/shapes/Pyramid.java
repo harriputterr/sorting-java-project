@@ -37,4 +37,11 @@ public class Pyramid extends AbstractShape
 	{
 		return (1.0 / 3.0) * edgeLength * edgeLength * height;
 	}
+	
+	// toString() override for Pyramid, for printing shapeData values
+	@Override
+	public String toString()
+	{
+	    return "Pyramid, height: " + height + ", edge length: " + edgeLength;
+	}
 }
