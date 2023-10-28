@@ -4,18 +4,18 @@
 * Assignment 1: Complexity & Sorting
 *
 * Team Members: Zoë Goodwin
-*				Mousamiben Desai
-*				Sourabh Thakur
-*				Nishant Kumar
+*			Mousamiben Desai
+*			Sourabh Thakur
+*			Nishant Kumar
 *****************************************
 
-Completeness of Project: ___%
+Completeness of Project: 100%
 
 Known Deficiencies:
-	- 
-	- 
+	- none
+	- none
 	
 Missing Functionalities:
-	- 
-	- 
+	- none
+	- none
 
