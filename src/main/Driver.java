@@ -1,17 +1,10 @@
 package main;
 
-/**
-* Created on October 17, 2023
-* @author Zoë Goodwin
-* @version 1.4
-*/
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.lang.reflect.Constructor;
@@ -19,16 +12,37 @@ import java.lang.reflect.Constructor;
 import main.shapes.AbstractShape;
 import main.utils.Utility;
 
+/**
+* The Driver class handles sorting different shapes based on user selected criteria.
+* Driver parses command line arguments to determine the file containing shapes data,
+* the criteria for comparison (i.e., volume, height, or base area), and the 
+* sorting algorithm to use.
+* The results, including performance metrics and every 1000th value of the sorted
+* list, are then displayed.
+* 
+* Created on October 17, 2023
+* @author Zoë Goodwin
+* @author Mousamiben Desai
+* @author Sourabh Thakur
+* @version 1.5
+*/
+
 public class Driver
 {
-	// program entry point
+        /**
+         * Entry point of the program. Processes command-line arguments for file name,
+         * type of comparison, and sorting algorithm; loads shapes from the file; sorts them;
+         * and then prints the sorting results and performance metrics.
+         * 
+         * @param args Command-line arguments for specifying input file, comparison type, and sorting algorithm.
+         */
 	public static void main(String[] args) {
 	    
 	    // Parse command-line arguments
-	    String fileName = parseCase(args, "f");
-	    String typeComparison = parseCase(args, "c");
-	    String sortingAlgorithm = parseCase(args, "s");
-	    
+	    String fileName = parseCase(args, 'f');
+	    String typeComparison = parseCase(args, 't');
+	    String sortingAlgorithm = parseCase(args, 's');
+
 	    // if command-line input is incomplete, print inputGuide
 	    if (fileName == null || typeComparison == null || sortingAlgorithm == null) {
 		inputGuide();
@@ -63,16 +77,23 @@ public class Driver
 	
 	// ***PRIVATE METHODS***
 	
-	
-	// method to ensure case and order insensitivity for interpreting command-line arguments
-	private static String parseCase(String[] args, String flag) {
+	/**
+	 * Parses the command-line arguments to find a match for a specified flag.
+	 * This method is case-insensitive for the flag character.
+	 *
+	 * @param args The array of command-line arguments.
+	 * @param flag The flag character to look for, case-insensitive.
+	 * @return The string argument corresponding to the flag, or {@code null} if not found.
+	 */
+	private static String parseCase(String[] args, char flag) {
+	    // convert any flag character to lower case
+	    char lowerCaseFlag = Character.toLowerCase(flag);
+	    // if a charArray starts with '-' and is followed by a flag character, 
+	    // return the character after the flag to its respective String variable
 	    for (int i = 0; i < args.length; i++) {
-	        System.out.println(args[i]); //		<-DELETE LATER
 	        char[] charArray = args[i].toCharArray();
 		if (charArray[0] == ('-')) {
-	            if (charArray[1] == 'f' || charArray[1] == 'F' ||
-	        	charArray[1] == 'c' || charArray[1] == 'C' ||
-	        	charArray[1] == 's' || charArray[1] == 'S') {
+	            if (charArray[1] == lowerCaseFlag) {
 	                return args[i].substring(2);
 	            }
 	        }
@@ -81,7 +102,13 @@ public class Driver
 	}
 	
 	
-	// method to handle loading the shapes text file into an array list
+	/**
+	 * Loads shapes from a specified file into an array of AbstractShape.
+	 * The method uses reflection to instantiate shape objects based on the shape data provided in the file.
+	 * 
+	 * @param fileName The path of the file containing shape data.
+	 * @return An array of AbstractShape objects, or {@code null} if the file cannot be loaded or parsed correctly.
+	 */
 	private static AbstractShape[] loadShapesFile(String fileName) {
 		
 	    List<AbstractShape> shapeList = new ArrayList<>();
@@ -98,7 +125,6 @@ public class Driver
 		}
 		
 		String[] shapeData = sb.toString().split(" ");
-		System.out.println("shape data:" + shapeData); //		<--DELETE LATER!
 		
 		// if not enough data for even one shape
 		if (shapeData.length < 2) {
@@ -123,7 +149,7 @@ public class Driver
 		
 		// the reflection section!
 		// manages iteration through the shapeData String
-		// since shapeData[0] is the number of shapes, the index starts at shapeData[1]
+		// since shapeData[0] is the number of shapes integer, the index starts at shapeData[1]
 		int dataIndex = 1;
 		for (int i = 0; i < numShapes; i++) {
 		    String shapeType = shapeData[dataIndex++];
@@ -152,7 +178,15 @@ public class Driver
 	}	
 
 	
-	// method to sort shapes using typeComparison, sortingAlgorithm, and Utility
+	/**
+	 * Sorts an array of AbstractShape objects based on a specified comparison type and sorting algorithm.
+	 * The method determines the appropriate Comparator for the shapes and uses the specified algorithm
+	 * from the Utility class for sorting.
+	 *
+	 * @param shapes           The array of AbstractShape objects to be sorted.
+	 * @param typeComparison   The criteria for comparison (e.g., volume, height, base area).
+	 * @param sortingAlgorithm The sorting algorithm to use (e.g., bubble, selection, insertion).
+	 */
 	private static void sortShapes(AbstractShape[] shapes, String typeComparison, String sortingAlgorithm)
 	{
 		// sort shapes using typeComparison and sorting Algorithm
@@ -165,19 +199,14 @@ public class Driver
 	        	    break;
 	        	case "h":
 	        	    // Compare by height using the natural ordering (compareTo)
+	        	    comparator = Comparator.naturalOrder();
 	        	    break;
 	        	case "a":
 	        	    // Compare by base area using the BaseAreaComparator
 	        	    comparator = new AbstractShape.BaseAreaComparator();
 	        	    break;
-			}
-	    
-    	    	if (comparator != null) {
-    	    	    Arrays.sort(shapes, comparator);
-    	    	} else {
-    	    	    Arrays.sort(shapes);
-    	    	}
-	    
+			} 
+ 
     	    	// Use the sorting algorithm from the Utility class based on the sortingAlgorithm parameter
     	    	switch (sortingAlgorithm.toLowerCase()) {
     	    		case "b":
@@ -200,12 +229,14 @@ public class Driver
     	    		    break;
     	    		default:
     	    		    System.out.println("Not a valid algorithm selection.");
-    	    		    return;
     	    	}
+
 	}
 		
 	
-	// method to print the input guide when command-line inputs are incomplete
+	/**
+	 * Prints a guide for the expected input format when the command-line inputs are incomplete or incorrect.
+	 */
 	private static void inputGuide() {
 	    System.out.println("Inputs: java -jar sort.jar -f <file_name> -t <v/h/a> -s <b/s/i/m/q/z>");
 	    System.out.println("-f: File path for the shapes text file.");
@@ -213,7 +244,13 @@ public class Driver
 	    System.out.println("-s: Sorting algorithm (b: bubble, s: selection, i: insertion, m: merge, q: quick, z: shell");
 	}
 	
-	// method to display the benchmarking and sorted results
+	/**
+	 * Displays the results of the sorting operation, including the algorithm's duration
+	 * and a selection of sorted shapes from the list.
+	 *
+	 * @param shapes             An array of sorted AbstractShape objects.
+	 * @param algorithmDuration  The time taken to sort the shapes, in milliseconds.
+	 */
 	private static void printResults(AbstractShape[] shapes, long algorithmDuration) {
 	    
 	    // print the algorithm duration, first sorted value, and last sorted value

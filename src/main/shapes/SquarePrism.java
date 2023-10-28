@@ -1,7 +1,11 @@
 package main.shapes;
 
 /**
+* Represents a square prism. This class provides implementation for calculating the 
+* base area of a square prism.
+* 
 * Created on October 15, 2023
+* 
 * @author Zoë Goodwin
 * @version 1.0
 */
@@ -9,26 +13,32 @@ package main.shapes;
 
 public class SquarePrism extends AbstractPrism
 {
-	private double edgeLength;
+	// attribute
+    	private double edgeLength;
 	
-	// constructor
+    	/**
+         * Constructs a new SquarePrism with specified height and edge length.
+         * Initializes the height of the prism using the superclass constructor and sets the edge length.
+         * 
+         * @param height     The height of the square prism.
+         * @param edgeLength The length of an edge of the square base.
+         */
 	public SquarePrism(double height, double edgeLength)
 	{
 		super(height);
 		this.edgeLength = edgeLength;
 	}
 	
-	// override method for calculating base area of square prism
+	/**
+	 * Calculates and returns the base area of the square prism.
+	 * The base area is calculated as the square of the edge length.
+	 * 
+	 * @return The base area of the square prism.
+	 */
 	@Override
 	public double getBaseArea()
 	{
 		return edgeLength * edgeLength;
 	}
 	
-	// toString() override for Square Prism, for printing shapeData values
-	@Override
-	public String toString()
-	{
-	    return "Square Prism, height: " + getHeight() + ", edge length: " + edgeLength;
-	}
 }
